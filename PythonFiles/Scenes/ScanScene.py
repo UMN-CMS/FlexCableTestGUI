@@ -9,13 +9,13 @@ from tkinter import *
 from turtle import back
 from PIL import ImageTk as iTK
 from PIL import Image
-import WagonTestGUI
+
  
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 
 # creating the Scan Frame's class (called ScanScene) to be instantiated in the GUIWindow
@@ -47,9 +47,9 @@ class ScanScene(tk.Frame):
         self.ent_snum.delete(0,END)
         self.master_window = master_window
         self.hide_rescan_button()
-
-        sys.path.insert(1,'/home/hgcal/WagonTest/WagonTestGUI/PythonFiles/Scanner/python')
-
+        '''
+        sys.path.insert(1,'/home/hgcal/FlexCableTestGUI/FlexCableTestGUI/PythonFiles/Scanner/python')
+        
         from ..Scanner.python.get_barcodes import scan, listen, parse_xml
 
         manager = mp.Manager()
@@ -58,6 +58,7 @@ class ScanScene(tk.Frame):
         self.ent_snum.config(state = 'normal')
 
         logging.info("ScanScene: Beginning scan...")
+        
         self.scanner = scan()
         self.listener = mp.Process(target=listen, args=(serial, self.scanner))
 
@@ -89,7 +90,7 @@ class ScanScene(tk.Frame):
                 break
             else:
                 time.sleep(.01)
-            
+        '''    
         logging.info("ScanScene: Scan complete.")
 
     # Creates the GUI itself
@@ -101,7 +102,7 @@ class ScanScene(tk.Frame):
 
         logging.info("ScanScene: Frame has been created.")
         # Create a photoimage object of the QR Code
-        QR_image = Image.open("{}/PythonFiles/Images/QRimage.png".format(WagonTestGUI.__path__[0]))
+        QR_image = Image.open("{}/PythonFiles/Images/QRimage.png".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'))
         QR_PhotoImage = iTK.PhotoImage(QR_image)
         QR_label = tk.Label(self, image=QR_PhotoImage)
         QR_label.image = QR_PhotoImage
@@ -192,8 +193,8 @@ class ScanScene(tk.Frame):
 
     # Function for the submit button
     def btn_submit_action(self, _parent):
-        self.data_holder.set_serial_ID(self.ent_snum.get())
         self.data_holder.check_if_new_board()
+        self.data_holder.set_serial_ID(self.ent_snum.get())
         _parent.scan_frame_progress()
 
 

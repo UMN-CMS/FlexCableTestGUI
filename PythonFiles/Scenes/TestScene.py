@@ -4,15 +4,15 @@
 import tkinter as tk
 import tkinter.font as font
 import logging
-import WagonTestGUI
+
 
 # Importing Necessary Files
-from WagonTestGUI.PythonFiles.utils.REQClient import REQClient
+from PythonFiles.utils.REQClient import REQClient
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Creating class for the window
 class TestScene(tk.Frame):

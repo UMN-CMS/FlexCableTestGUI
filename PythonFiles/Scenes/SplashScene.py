@@ -5,12 +5,12 @@ import tkinter as tk
 from PIL import ImageTk as iTK
 from PIL import Image
 import logging
-import WagonTestGUI
+
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 class SplashScene(tk.Frame):
 
@@ -26,7 +26,7 @@ class SplashScene(tk.Frame):
 
         logging.info("SplashScene: Frame has been initialized.")
         # Creating Bethel Logo
-        img_bethel_logo = Image.open("{}/PythonFiles/Images/Bethel_Logo.png".format(WagonTestGUI.__path__[0]))
+        img_bethel_logo = Image.open("{}/PythonFiles/Images/Bethel_Logo.png".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'))
         img_bethel_logo = img_bethel_logo.resize((250,100), Image.ANTIALIAS)
         phimg_bethel_logo = iTK.PhotoImage(img_bethel_logo)
         lbl_bethel_logo = tk.Label(self, image=phimg_bethel_logo, width=250, height=100)
@@ -35,7 +35,7 @@ class SplashScene(tk.Frame):
         lbl_bethel_logo.grid(row=0, column= 0, padx = 50, pady = 100)
 
         # Creating UMN Logo
-        img_umn_logo = Image.open('{}/PythonFiles/Images/UMN_Logo.png'.format(WagonTestGUI.__path__[0]))
+        img_umn_logo = Image.open('{}/PythonFiles/Images/UMN_Logo.png'.format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'))
         img_umn_logo = img_umn_logo.resize((250,100), Image.ANTIALIAS)
         phimg_umn_logo = iTK.PhotoImage(img_umn_logo)
         lbl_umn_logo = tk.Label(self, image=phimg_umn_logo, width=250, height=100)

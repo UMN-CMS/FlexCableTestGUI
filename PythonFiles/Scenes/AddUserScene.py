@@ -4,12 +4,12 @@
 # importing necessary modules
 import tkinter as tk
 import logging
-import WagonTestGUI
+
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 
 # Creates a class that is called by the GUIWindow. 

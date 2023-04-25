@@ -9,25 +9,25 @@ import logging
 #from pyparsing import trace_parse_action
 
 # Importing all the neccessary files and classes from them
-from WagonTestGUI.PythonFiles.Scenes.SidebarScene import SidebarScene
-from WagonTestGUI.PythonFiles.Scenes.LoginScene import LoginScene
-from WagonTestGUI.PythonFiles.Scenes.ScanScene import ScanScene
-from WagonTestGUI.PythonFiles.TestFailedPopup import TestFailedPopup
-from WagonTestGUI.PythonFiles.Scenes.TestSummaryScene import TestSummaryScene
-from WagonTestGUI.PythonFiles.Scenes.TestScene import *
-from WagonTestGUI.PythonFiles.Scenes.TestInProgressScene import TestInProgressScene
-from WagonTestGUI.PythonFiles.Data.DataHolder import DataHolder
-from WagonTestGUI.PythonFiles.Scenes.SplashScene import SplashScene
-from WagonTestGUI.PythonFiles.Scenes.TestInProgressScene import *
-from WagonTestGUI.PythonFiles.Scenes.Inspection1 import Inspection1
-from WagonTestGUI.PythonFiles.Scenes.AddUserScene import AddUserScene
+from PythonFiles.Scenes.SidebarScene import SidebarScene
+from PythonFiles.Scenes.LoginScene import LoginScene
+from PythonFiles.Scenes.ScanScene import ScanScene
+from PythonFiles.TestFailedPopup import TestFailedPopup
+from PythonFiles.Scenes.TestSummaryScene import TestSummaryScene
+from PythonFiles.Scenes.TestScene import *
+from PythonFiles.Scenes.TestInProgressScene import TestInProgressScene
+from PythonFiles.Data.DataHolder import DataHolder
+from PythonFiles.Scenes.SplashScene import SplashScene
+#from PythonFiles.Scenes.TestInProgressScene import *
+from PythonFiles.Scenes.Inspection1 import Inspection1
+from PythonFiles.Scenes.AddUserScene import AddUserScene
 
 #################################################################################
 
 
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Create a class for creating the basic GUI Window to be called by the main function to
 # instantiate the actual object
@@ -87,11 +87,12 @@ class GUIWindow():
         self.scan_frame.grid(row=0, column=0)
 
         self.test1_frame= Test1Scene(self, self.master_frame, self.data_holder, 
-                            "General Resistance Test",
+                            "RTD",
                             queue
                             )
         self.test1_frame.grid(row=0, column=0)
 
+        '''
         self.test2_frame= Test2Scene(self, self.master_frame, self.data_holder,
                             "ID Resistor Test", 
                             queue
@@ -103,9 +104,9 @@ class GUIWindow():
                             queue
                             )
         self.test3_frame.grid(row=0, column=0)
-
+        '''
         self.test4_frame= Test4Scene(self, self.master_frame, self.data_holder, 
-                            "Bit Rate Test", 
+                            "BERT", 
                             queue
                             )
         self.test4_frame.grid(row=0, column=0)
@@ -132,9 +133,13 @@ class GUIWindow():
         self.master_window.protocol('WM_DELETE_WINDOW', self.exit_function)
         
         # Sets the current frame to the splash frame
-        self.set_frame_splash_frame()
-        self.master_frame.update() 
+        #self.set_frame_splash_frame()
+        #self.master_frame.update() 
+
+        print("Before Splash")
         self.master_frame.after(50, self.set_frame_login_frame)
+
+        print("After Splash")
 
         self.master_window.mainloop()
         
@@ -217,7 +222,7 @@ class GUIWindow():
 
         logging.debug("GUIWindow: The frame has been set to test1_frame.")
     #################################################
-
+    '''
     def set_frame_test2(self):
         self.test2_frame.update_frame(self)
         self.set_frame(self.test2_frame)
@@ -233,7 +238,7 @@ class GUIWindow():
 
         logging.debug("GUIWindow: The frame has been set to test3_frame.")
     #################################################
-
+    '''
     def set_frame_test4(self):
         self.test4_frame.update_frame(self)
         self.set_frame(self.test4_frame)
@@ -245,7 +250,10 @@ class GUIWindow():
     def set_frame_test_in_progress(self, queue):
         self.set_frame(self.test_in_progress_frame)
         self.sidebar.disable_all_btns()
+        print("BEGINING UPDATE")
+        self.master_window.update()
         self.test_in_progress_frame.begin_update(self.master_window, queue)
+        print("ENDING UPDATE")
         self.go_to_next_test()   
 
         logging.debug("GUIWindow: The frame has been set to test_in_progress_frame.")
@@ -260,6 +268,7 @@ class GUIWindow():
         # Array of potentially uncompleted tests
         test_completed_list = self.data_holder.data_lists['test_completion']
         
+        print("Completed tests: ", test_completed_list)
 
         test_incomplete = False
         
@@ -267,14 +276,16 @@ class GUIWindow():
         logging.info("GUIWindow: Testing which tests have been completed.")
         # Checks tells the function which frame to set based on what frame is currently up
         for index, test in enumerate(test_completed_list):
-            
+            '''
             if test == True and index >=  self.current_test_index:
-                print("Test", index + 1, "== True")
                 if self.completed_window_alive == False:
                     self.completed_window_popup()
                 else:
                     pass
-            elif test == True:
+            '''
+            if test == True and index == 0:
+                continue
+            elif test == True and self.current_test_index == 4:
                 pass
             else:
                 test_incomplete = True
@@ -282,15 +293,17 @@ class GUIWindow():
                     self.set_frame_test1()
                     self.current_test_index = 1
                 elif (index == 1):
-                    self.set_frame_test2()
-                    self.current_test_index = 2
-                elif (index == 2):
-                    self.set_frame_test3()
-                    self.current_test_index = 3
-                elif (index == 3):
                     self.set_frame_test4()
                     self.current_test_index = 4
-                break
+            '''
+            elif (index == 2):
+                self.set_frame_test_summary()
+                self.current_test_index = 5
+            elif (index == 3):
+                self.set_frame_test4()
+                self.current_test_index = 4
+            '''
+            break
         
 
 
@@ -354,19 +367,20 @@ class GUIWindow():
         # Brings up the test_failed popup if the test is false, continues on if not
         # Also tests the current test index so that in the event you are retrying a test it will not prompt 
         # the user about the previous test failing
-        if _frame == self.test2_frame and self.current_test_index == 1:
+        if _frame == self.test4_frame and self.current_test_index == 1:
            if self.data_holder.data_dict['test1_pass'] == False:
                 TestFailedPopup(self, self.test1_frame, self.data_holder)
-        if _frame == self.test3_frame and self.current_test_index == 2:
-            if self.data_holder.data_dict['test2_pass'] == False:
-                TestFailedPopup(self, self.test2_frame, self.data_holder)
+        if _frame == self.test_summary_frame and self.current_test_index == 4:
+            if self.data_holder.data_dict['test4_pass'] == False:
+                TestFailedPopup(self, self.test4_frame, self.data_holder)
+        '''
         if _frame == self.test4_frame and self.current_test_index == 3:
             if self.data_holder.data_dict['test3_pass'] == False:
                 TestFailedPopup(self, self.test3_frame, self.data_holder)
         if _frame == self.test_summary_frame and self.current_test_index == 4:
             if self.data_holder.data_dict['test4_pass'] == False:
                 TestFailedPopup(self, self.test4_frame, self.data_holder)
-
+        '''
         # Raises the passed in frame to be the current frame
         _frame.tkraise()
 

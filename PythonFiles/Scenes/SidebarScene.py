@@ -4,12 +4,12 @@ import tkinter as tk
 from PIL import ImageTk as iTK
 from PIL import Image
 import logging
-import WagonTestGUI
+
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 class SidebarScene(tk.Frame):
 
@@ -30,12 +30,13 @@ class SidebarScene(tk.Frame):
 
         # List for creating check marks with for loop
         self.list_of_pass_fail = self.data_holder.data_lists['test_results']
+        print(self.list_of_pass_fail)
 
         # For loop to create checkmarks based on pass/fail
         for index in range(len(self.list_of_pass_fail)):
             if(self.list_of_pass_fail[index] == True):
                 # Create a photoimage object of the QR Code
-                Green_Check_Image = Image.open("{}/PythonFiles/Images/GreenCheckMark.png".format(WagonTestGUI.__path__[0]))
+                Green_Check_Image = Image.open("{}/PythonFiles/Images/GreenCheckMark.png".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'))
                 Green_Check_Image = Green_Check_Image.resize((50,50), Image.ANTIALIAS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
                 GreenCheck_Label = tk.Label(self, image=Green_Check_PhotoImage, width=50, height=50, bg = '#808080')
@@ -45,7 +46,7 @@ class SidebarScene(tk.Frame):
 
             else:
                 # Create a photoimage object of the QR Code
-                Red_X_Image = Image.open("{}/PythonFiles/Images/RedX.png".format(WagonTestGUI.__path__[0]))
+                Red_X_Image = Image.open("{}/PythonFiles/Images/RedX.png".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'))
                 Red_X_Image = Red_X_Image.resize((50,50), Image.ANTIALIAS)
                 Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
                 RedX_Label = tk.Label(self, image=Red_X_PhotoImage, width=50, height=50, bg = '#808080')
@@ -93,7 +94,7 @@ class SidebarScene(tk.Frame):
         if self.data_holder.data_dict['test1_pass'] == True:
             self.btn_test1.config(state = 'disabled')
 
-
+        '''
         self.btn_test2 = tk.Button(
             self,
             pady = btn_pady, 
@@ -121,7 +122,7 @@ class SidebarScene(tk.Frame):
 
         if self.data_holder.data_dict['test3_pass'] == True:
             self.btn_test3.config(state = 'disabled')
-
+        '''
         self.btn_test4 = tk.Button(
             self, 
             pady = btn_pady,
@@ -131,7 +132,7 @@ class SidebarScene(tk.Frame):
             font = btn_font,
             command = lambda: self.btn_test4_action(parent)
             )
-        self.btn_test4.grid(column = 0, row = 5)
+        self.btn_test4.grid(column = 0, row = 3)
         if self.data_holder.data_dict['test4_pass'] == True:
             self.btn_test4.config(state = 'disabled')
 
@@ -144,7 +145,7 @@ class SidebarScene(tk.Frame):
             font = btn_font,
             command = lambda: self.btn_summary_action(parent)
             )
-        self.btn_summary.grid(column = 0, row = 6)
+        self.btn_summary.grid(column = 0, row = 4)
 
         self.grid_propagate(0)
 
@@ -152,13 +153,13 @@ class SidebarScene(tk.Frame):
 
     def btn_test1_action(self, _parent):
         _parent.set_frame_test1()
-
+    '''
     def btn_test2_action(self, _parent):
         _parent.set_frame_test2()
 
     def btn_test3_action(self, _parent):
         _parent.set_frame_test3()
-
+    '''
     def btn_test4_action(self, _parent):
         _parent.set_frame_test4()
 
@@ -171,8 +172,8 @@ class SidebarScene(tk.Frame):
         self.btn_login.config(state = 'disabled')
         self.btn_scan.config(state = 'disabled')
         self.btn_test1.config(state = 'disabled')
-        self.btn_test2.config(state = 'disabled')
-        self.btn_test3.config(state = 'disabled')
+        #self.btn_test2.config(state = 'disabled')
+        #self.btn_test3.config(state = 'disabled')
         self.btn_test4.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
 
@@ -180,8 +181,8 @@ class SidebarScene(tk.Frame):
 
     def disable_all_but_log_scan(self):
         self.btn_test1.config(state = 'disabled')
-        self.btn_test2.config(state = 'disabled')
-        self.btn_test3.config(state = 'disabled')
+        #self.btn_test2.config(state = 'disabled')
+        #self.btn_test3.config(state = 'disabled')
         self.btn_test4.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
 
@@ -190,8 +191,8 @@ class SidebarScene(tk.Frame):
     def disable_all_btns_but_scan(self):
         self.btn_login.config(state = 'disabled')
         self.btn_test1.config(state = 'disabled')
-        self.btn_test2.config(state = 'disabled')
-        self.btn_test3.config(state = 'disabled')
+        #self.btn_test2.config(state = 'disabled')
+        #self.btn_test3.config(state = 'disabled')
         self.btn_test4.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
 
@@ -201,8 +202,8 @@ class SidebarScene(tk.Frame):
         self.btn_login.config(state = 'normal')
         self.btn_scan.config(state = 'disabled')
         self.btn_test1.config(state = 'disabled')
-        self.btn_test2.config(state = 'disabled')
-        self.btn_test3.config(state = 'disabled')
+        #self.btn_test2.config(state = 'disabled')
+        #self.btn_test3.config(state = 'disabled')
         self.btn_test4.config(state = 'disabled')
         self.btn_summary.config(state = 'disabled')
 

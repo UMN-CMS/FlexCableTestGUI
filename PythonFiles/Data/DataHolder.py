@@ -1,5 +1,6 @@
 ################################################################################
 import json, logging, socket, os, sys
+import datetime
 #sys.path.insert(0, "/home/hgcal/FlexCableTestGUI/FlexCableTestGUI/PythonFiles/Data")
 #print(sys.path)
 #from DBSender import DBSender
@@ -37,8 +38,8 @@ class DataHolder():
                 'test4_pass': False,
                 'comments': "_",
                 'is_new_board': False,
-                #'tests_run': [str(1), str(2), str(3), str(4)],
-                'tests_run': [str(1), str(4)],
+                'tests_run': [str(1), str(2), str(3), str(4)],
+                #'tests_run': [str(1), str(4)],
                 }
         self.inspection_data = {
                 'board_chipped_bent': False,
@@ -114,7 +115,6 @@ class DataHolder():
         if self.data_dict['is_new_board'] == False:
             #prev_results = self.data_sender.get_previous_test_results(self.get_serial_ID())
             prev_results = self.get_previous_test_results(self.get_serial_ID())
-            print(prev_results)
             for result in prev_results:
                 test_id = result[0]
                 pass_fail = result[1]
@@ -218,7 +218,7 @@ class DataHolder():
         logging.info("DataHolder: All results sent to database.")
     #################################################
 
-    def send_to_DB(self, test_run):
+    def send_to_DB(self, test_run, test_result):
         index = test_run - 1
         
         file_path_list = [
@@ -231,7 +231,7 @@ class DataHolder():
 
         # Converts self.test_results[index] into 1/0 instead of bool       
         temp = 0
-        if self.data_lists['test_results'][index]:
+        if test_result:
             temp = 1 
 
 
@@ -263,21 +263,24 @@ class DataHolder():
             print("No results for this board yet, will be writing from scratch")
             data_current = {}
 
+
         test_type = data_general["test_type"]
         data_current['serial_num'] = data_general["serial_num"]
         data_current['tester'] = data_general['tester']
         data_current['test{}_completed'.format(test_type)] = True
         data_current['test{}_pass'.format(test_type)] = data_general['successful'] == 1
+        data_current['comments'] = data_general['comments']
 
         # Update board results json
         with open(self.board_path, 'r') as in_board:
             board_data = json.load(in_board)
         in_board.close()
         
-        board_data["previous_results"].append([test_type, data_general['successful']])
+        board_data[str(self.get_serial_ID())]["previous_results"].append([test_type, data_general['successful']])
 
-        with open(self.board_path, 'r') as out_board:
+        with open(self.board_path, 'w') as out_board:
             json.dump(board_data, out_board)
+        out_board.close()
 
         with open(outpath, 'w') as out_general:
             json.dump(data_current, out_general)
@@ -287,7 +290,7 @@ class DataHolder():
 
         current_test = test_names[int(test_type) - 1]
 
-        outpath = "/home/hgcal/FlexCableTestGUI/Data/results/{}/results_{}.json".format(current_test, self.get_serial_ID())
+        outpath = "/home/hgcal/FlexCableTestGUI/Data/results/{}/results_{}_{}.json".format(current_test, self.get_serial_ID(), datetime.datetime.now())
 
         try:
             with open(in_data_path, 'r') as in_data:
@@ -324,18 +327,21 @@ class DataHolder():
     
     def update_from_json_string(self, imported_json_string):
         json_dict = json.loads(imported_json_string)
- 
+
+        print("Received JSON dict, printing results:")
+        print(json_dict)
+
         test_type = json_dict["name"]
 
-        if test_type == "General Resistance Test":
+        if test_type == "RTD":
             with open("{}/PythonFiles/JSONFiles/Current_GenRes_JSON.json".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'), "w") as file:
-                json.dump(json_dict['data'], file)
+                json.dump(json.loads(json_dict['data']), file)
             print("\n\n\n\n GENRES TEST \n\n\n\n")
             self.data_dict['user_ID'] = json_dict["tester"]
             self.data_dict['current_serial_ID'] = json_dict["board_sn"] 
             self.data_dict['test1_completed'] = True
             self.data_dict['test1_pass'] = json_dict["pass"]
-            self.send_to_DB(1)
+            self.send_to_DB(1, json_dict["pass"])
 
 
         elif test_type == "ID Resistance Test":
@@ -359,14 +365,14 @@ class DataHolder():
             self.data_dict['test3_pass'] = json_dict["pass"]
             self.send_to_DB(3)
 
-        elif test_type == "Bit Error Rate Test":
+        elif test_type == "BERT":
             with open("{}/PythonFiles/JSONFiles/Current_BERT_JSON.json".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'), "w") as file:
                 json.dump(json_dict['data'], file)
             self.data_dict['user_ID'] = json_dict["tester"]
             self.data_dict['current_serial_ID'] = json_dict["board_sn"] 
             self.data_dict['test4_completed'] = True
             self.data_dict['test4_pass'] = json_dict["pass"]
-            self.send_to_DB(4)
+            self.send_to_DB(4, json_dict["pass"])
 
         # Updates the lists
         self.data_lists['test_results'] = [self.data_dict['test1_pass'], self.data_dict['test4_pass']]

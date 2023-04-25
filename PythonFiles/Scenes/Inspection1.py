@@ -69,8 +69,7 @@ class Inspection1(tk.Frame):
 
 
         self.board_chipped_bent = tk.BooleanVar()
-        self.wagon_connection_pin_bent = tk.BooleanVar()
-        self.engine_connection_pin_bent = tk.BooleanVar()
+        self.connection_issue = tk.BooleanVar()
         self.visual_scratches = tk.BooleanVar()
         
 
@@ -93,25 +92,13 @@ class Inspection1(tk.Frame):
         c2 = tk.Checkbutton(
             frm_window, 
             font = font_scene_14,
-            text='Wagon Connection Pin Bent',
-            variable= self.wagon_connection_pin_bent, 
+            text='Connection Issue',
+            variable= self.connection_issue, 
             onvalue=True, 
             offvalue=False 
             # command=print_selection
             )
         c2.grid(row = 2, column= 1, sticky='w', columnspan=2)
-
-        # Checkbutton3
-        c3 = tk.Checkbutton(
-            frm_window, 
-            font = font_scene_14,
-            text='Engine Connection Pin Bent',
-            variable= self.engine_connection_pin_bent, 
-            onvalue=True, 
-            offvalue=False 
-            # command=print_selection
-            )
-        c3.grid(row = 3, column= 1, sticky='w', columnspan=2)
 
         # Checkbutton4
         c4 = tk.Checkbutton(
@@ -123,7 +110,7 @@ class Inspection1(tk.Frame):
             offvalue=False 
             # command=print_selection
         )
-        c4.grid(row = 4, column= 1, sticky='w', columnspan=2)
+        c4.grid(row = 3, column= 1, sticky='w', columnspan=2)
 
 
 
@@ -215,8 +202,7 @@ class Inspection1(tk.Frame):
 
     def update_data_holder(self):
         self.data_holder.inspection_data['board_chipped_bent'] = self.board_chipped_bent.get()
-        self.data_holder.inspection_data['wagon_connection_pin_bent'] = self.wagon_connection_pin_bent.get()
-        self.data_holder.inspection_data['engine_connection_pin_bent'] = self.engine_connection_pin_bent.get()
+        self.data_holder.inspection_data['connection_issue'] = self.connection_issue.get()
         self.data_holder.inspection_data['visual_scratches'] = self.visual_scratches.get()
         self.data_holder.inspection_data['inspection_comments'] = self.comment_box.get()
         self.data_holder.add_inspection_to_comments()
