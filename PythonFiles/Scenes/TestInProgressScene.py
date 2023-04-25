@@ -6,12 +6,12 @@ from tkinter import ttk
 from xml.dom.expatbuilder import parseFragmentString
 import time
 import logging
-import WagonTestGUI
+
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Creating the frame itself
 class TestInProgressScene(tk.Frame):
@@ -83,6 +83,7 @@ class TestInProgressScene(tk.Frame):
             )
         lbl_title.pack(padx = 0, pady = 50)
 
+        '''
         # Create a progress bar that does not track progress but adds motion to the window
         self.prgbar_progress = ttk.Progressbar(
             self, 
@@ -92,7 +93,7 @@ class TestInProgressScene(tk.Frame):
         self.prgbar_progress.start()
 
         print("\n\n\n\n\n\n\n\n Starting Progress Bar \n\n\n\n\n\n\n")
-
+        '''
         # A Button To Stop the Progress Bar and Progress Forward (Temporary until we link to actual progress)
         btn_stop = ttk.Button(
             self, 
@@ -129,35 +130,39 @@ class TestInProgressScene(tk.Frame):
 
     def begin_update(self, master_window, queue):
         logging.info("TestInProgressScene: Started console update loop.")
-        # try:
-        while 1>0:
-                # try:
-            master_window.update()
-            if not queue.empty():    
+        print("Starting loop")
+        try: 
+            while 1>0:
+                master_window.update()
                 logging.info("TestInProgressScene: Waiting for queue objects...")
-                text = queue.get()
-                print(text)
-                ent_console.insert(tk.END, text)
-                ent_console.insert(tk.END, "\n")
-                ent_console.see('end')
+                if not queue.empty():    
+                    logging.info("TestInProgressScene: Waiting for queue objects...")
+                    text = queue.get()
+                    print(text)
+                    ent_console.insert(tk.END, text)
+                    ent_console.insert(tk.END, "\n")
+                    ent_console.see('end')
 
-                if text == "Results received successfully.":
-                
-                    message =  self.conn.recv()
+                    if text == "Results received successfully.":
                     
-                    print("\n\nmessage:",message , "\n\n")
-                    self.data_holder.update_from_json_string(message) 
+                        message =  self.conn.recv()
+                        
+                        print("\n\nmessage:",message , "\n\n")
+                        self.data_holder.update_from_json_string(message) 
+                        
+                        logging.info("TestInProgressScene: JSON Received.")
+                        master_window.update()
+                        time.sleep(1)
+                        break
                     
-                    logging.info("TestInProgressScene: JSON Received.")
-                    master_window.update()
-                    time.sleep(1)
-                    break
-                
-            else:
-                time.sleep(.01)
+                else:
+                    time.sleep(.01)
+        except Exception as e:
+            logging.info(e)
 
     def close_prgbar(self):
         logging.debug("TestInProgressScene: Closing the progressbar.")
         self.prgbar_progress.stop()
         self.prgbar_progress.destroy()
         logging.debug("TestInProgressScene: Progressbar succesfully closed.")
+

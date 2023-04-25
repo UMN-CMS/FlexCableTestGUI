@@ -1,25 +1,27 @@
 # Importing necessary modules
 import zmq, logging
-import WagonTestGUI
+
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/SUBClient.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.INFO)
+logging.basicConfig(filename="{}/PythonFiles/utils/logs/SUBClient.log".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 
 # Creating a class for the SUBSCRIBE socket-type Client
 class SUBClient():
 
     def __init__(self, conn, queue):
-        with open("{}/PythonFiles/utils/server_ip.txt".format(WagonTestGUI.__path__[0]), "r") as openfile:
+        with open("{}/PythonFiles/utils/server_ip.txt".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'), "r") as openfile:
             grabbed_ip = openfile.read()
         logging.info("SUBClient has started") 
         # Insantiates variables       
         self.conn = conn
         self.message = ""
         # Creates the zmq.Context object
+        print("Attempt Sub client")
         cxt = zmq.Context()
         # Creates the socket as the SUBSCRIBE type
         listen_socket = cxt.socket(zmq.SUB)
+        print("{ip_address}".format(ip_address = grabbed_ip))
         listen_socket.connect("tcp://{ip_address}:5556".format(ip_address = grabbed_ip))
         # Sets the topics that the server will listen for
         listen_socket.setsockopt(zmq.SUBSCRIBE, b'print')
@@ -66,3 +68,5 @@ class SUBClient():
         except Exception as e:
             logging.debug(e)
             logging.critical("SUBClient: SUBClient has crashed. Please restart the software.")
+
+print("My SUBClient import")

@@ -1,6 +1,6 @@
 import requests
 import json
-import WagonTestGUI
+
 # from read_barcode import read_barcode
 
 
@@ -92,7 +92,7 @@ class DBSender():
         r = requests.post('http://cmslab3.umncmslab/~cros0400/cgi-bin/is_new_board.py', data={"serial_number": str(sn)})
         
         lines = r.text.split('\n')
-       
+
         begin = lines.index("Begin") + 1
         end = lines.index("End")
 

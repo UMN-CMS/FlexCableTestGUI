@@ -1,18 +1,18 @@
 #################################################################################
 
-import WagonTestGUI
+
 import json, logging
 import tkinter as tk
 from PIL import ImageTk as iTK
 from PIL import Image
 from matplotlib.pyplot import table
 from pyparsing import col
-import WagonTestGUI
+
 
 #################################################################################
 
 FORMAT = '%(asctime)s|%(levelname)s|%(message)s|'
-logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format(WagonTestGUI.__path__[0]), filemode = 'w', format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="{}/PythonFiles/logs/GUIWindow.log".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'), filemode = 'w', format=FORMAT, level=logging.DEBUG)
 
 # Frame that shows all of the final test results
 # @param parent -> References a GUIWindow object
@@ -38,9 +38,9 @@ class TestSummaryScene(tk.Frame):
         # Setting weights of columns so the column 4 is half the size of columns 0-3
         self.columnconfigure(0, weight = 2)
         self.columnconfigure(1, weight = 2)
-        self.columnconfigure(2, weight = 2)
-        self.columnconfigure(3, weight = 2)
-        self.columnconfigure(4, weight = 1)
+        #self.columnconfigure(2, weight = 2)
+        #self.columnconfigure(3, weight = 2)
+        self.columnconfigure(2, weight = 1)
         # Instantiates an updated table with the current data
         self.create_updated_table(parent)
 
@@ -66,7 +66,7 @@ class TestSummaryScene(tk.Frame):
 
         logging.debug("TestSummaryScene: Table is being updated.")        
         
-        self.list_of_tests = ["General Resistance Test", "ID Resistor Test", "I2C Comm. Test", "Bit Rate Test"]
+        self.list_of_tests = ["General Resistance Test", "Bit Rate Test"]
         self.list_of_table_labels = ["Test Name", "Test Status", "Pass/Fail"]
         self.list_of_completed_tests = self.data_holder.data_lists['test_completion']
         self.list_of_pass_fail = self.data_holder.data_lists['test_results']
@@ -96,9 +96,9 @@ class TestSummaryScene(tk.Frame):
         # Setting weights of columns so the column 4 is half the size of columns 0-3
         self.frm_table.columnconfigure(0, weight = 2)
         self.frm_table.columnconfigure(1, weight = 2)
-        self.frm_table.columnconfigure(2, weight = 2)
-        self.frm_table.columnconfigure(3, weight = 1)
-        self.frm_table.columnconfigure(4, weight = 1)
+        #self.frm_table.columnconfigure(2, weight = 2)
+        #self.frm_table.columnconfigure(3, weight = 1)
+        self.frm_table.columnconfigure(2, weight = 1)
         
 
         
@@ -160,7 +160,7 @@ class TestSummaryScene(tk.Frame):
         for index in range(len(self.list_of_pass_fail)):
             if(self.list_of_pass_fail[index]):
                 # Create a photoimage object of the QR Code
-                Green_Check_Image = Image.open("{}/PythonFiles/Images/GreenCheckMark.png".format(WagonTestGUI.__path__[0]))
+                Green_Check_Image = Image.open("{}/PythonFiles/Images/GreenCheckMark.png".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'))
                 Green_Check_Image = Green_Check_Image.resize((75,75), Image.ANTIALIAS)
                 Green_Check_PhotoImage = iTK.PhotoImage(Green_Check_Image)
                 GreenCheck_Label = tk.Label(self.frm_table, image=Green_Check_PhotoImage, width=75, height=75)
@@ -170,7 +170,7 @@ class TestSummaryScene(tk.Frame):
 
             else:
                 # Create a photoimage object of the QR Code
-                Red_X_Image = Image.open("{}/PythonFiles/Images/RedX.png".format(WagonTestGUI.__path__[0]))
+                Red_X_Image = Image.open("{}/PythonFiles/Images/RedX.png".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'))
                 Red_X_Image = Red_X_Image.resize((75,75), Image.ANTIALIAS)
                 Red_X_PhotoImage = iTK.PhotoImage(Red_X_Image)
                 RedX_Label = tk.Label(self.frm_table, image=Red_X_PhotoImage, width=75, height=75)
@@ -215,7 +215,7 @@ class TestSummaryScene(tk.Frame):
 
 
 
-
+        '''
         row2 = tk.Frame(self.frm_table)
         row2.grid(column = 3, row = 2)
         
@@ -260,14 +260,14 @@ class TestSummaryScene(tk.Frame):
                 command = lambda: self.btn_more_info3_action(parent)
                 )
         btn_more_info3.grid(column=0, row = 0)
-
+        '''
         
         
         
     
         
         row4 = tk.Frame(self.frm_table)
-        row4.grid(column = 3, row = 4)
+        row4.grid(column = 3, row = 2)
         
         btn_retest4 = tk.Button(
                 row4, 
@@ -296,7 +296,7 @@ class TestSummaryScene(tk.Frame):
                 font = ('Arial', 15), 
                 command = lambda: self.btn_next_test_action(parent)
                 )
-        btn_next_test.grid(column = 3, row = 5)
+        btn_next_test.grid(column = 3, row = 3)
 
         logging.debug("TestSummaryScene: Buttons finshed being created.")
 
@@ -366,16 +366,16 @@ class TestSummaryScene(tk.Frame):
     #################################################
 
     def btn_more_info1_action(self, _parent):
-        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_GenRes_JSON.json".format(WagonTestGUI.__path__[0]))
+        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_GenRes_JSON.json".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'))
 
     def btn_more_info2_action(self, _parent):
-        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_IDRes_JSON.json".format(WagonTestGUI.__path__[0]))
+        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_IDRes_JSON.json".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'))
 
     def btn_more_info3_action(self, _parent):
-        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_IIC_JSON.json".format(WagonTestGUI.__path__[0]))
+        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_IIC_JSON.json".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'))
     
     def btn_more_info4_action(self, _parent):
-        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_BERT_JSON.json".format(WagonTestGUI.__path__[0]))
+        self.create_JSON_popup("{}/PythonFiles/JSONFiles/Current_BERT_JSON.json".format('/home/hgcal/FlexCableTestGUI/FlexCableTestGUI'))
 
     #################################################
 
